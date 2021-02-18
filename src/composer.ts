@@ -382,7 +382,7 @@ export class Composer<C extends Context> implements MiddlewareObj<C> {
   ): MiddlewareFn<C> {
     return Composer.optional<C>(
       (ctx) => guardFn(ctx.update),
-      // @ts-expect-error see explanation above
+      // @ts-ignore see explanation above
       ...fns
     )
   }
@@ -449,7 +449,7 @@ export class Composer<C extends Context> implements MiddlewareObj<C> {
           ctx
         )
       )
-      // @ts-expect-error see explanation above
+      // @ts-ignore see explanation above
     }, ...fns)
   }
 
@@ -461,9 +461,9 @@ export class Composer<C extends Context> implements MiddlewareObj<C> {
     if (fns.length === 0) {
       // prettier-ignore
       return Array.isArray(predicate)
-        // @ts-expect-error predicate is really the middleware
+        // @ts-ignore predicate is really the middleware
         ? Composer.entity(entityType, ...predicate)
-        // @ts-expect-error predicate is really the middleware
+        // @ts-ignore predicate is really the middleware
         : Composer.entity(entityType, predicate)
     }
     const triggers = normalizeTriggers(predicate)
@@ -472,13 +472,13 @@ export class Composer<C extends Context> implements MiddlewareObj<C> {
         return false
       }
       for (const trigger of triggers) {
-        // @ts-expect-error define so far unknown property `match`
+        // @ts-ignore define so far unknown property `match`
         if ((ctx.match = trigger(value, ctx))) {
           return true
         }
       }
       return false
-      // @ts-expect-error see explanation above
+      // @ts-ignore see explanation above
     }, ...fns)
   }
 
@@ -573,7 +573,7 @@ export class Composer<C extends Context> implements MiddlewareObj<C> {
       for (const trigger of triggers) {
         const match = trigger(text, ctx)
         if (match) {
-          // @ts-expect-error define so far unknown property `match`
+          // @ts-ignore define so far unknown property `match`
           return handler(Object.assign(ctx, { match }), next)
         }
       }
@@ -602,7 +602,7 @@ export class Composer<C extends Context> implements MiddlewareObj<C> {
     ...fns: MatchedMiddleware<C, 'text'>
   ): MiddlewareFn<C> {
     if (fns.length === 0) {
-      // @ts-expect-error command is really the middleware
+      // @ts-ignore command is really the middleware
       return Composer.entity('bot_command', command)
     }
     const commands = normalizeTextArguments(command, '/')
@@ -618,7 +618,7 @@ export class Composer<C extends Context> implements MiddlewareObj<C> {
             offset === 0 &&
             type === 'bot_command' &&
             (commands.includes(value) || groupCommands.includes(value)),
-          // @ts-expect-error see explanation above
+          // @ts-ignore see explanation above
           ...fns
         )
       })
