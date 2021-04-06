@@ -56,7 +56,8 @@ export namespace Telegraf {
       /** TLS server options. Omit to use http. */
       tlsOptions?: TlsOptions
 
-      cb?: http.RequestListener
+      cb?: http.RequestListener,
+      certPath?: string
     }
   }
 }
@@ -128,7 +129,7 @@ export class Telegraf<C extends Context = Context> extends Composer<C> {
     })
   }
 
-  private startWebhook(
+  public startWebhook(
     hookPath: string,
     tlsOptions?: TlsOptions,
     port?: number,
@@ -184,9 +185,11 @@ export class Telegraf<C extends Context = Context> extends Composer<C> {
       debug('Bot started with webhook')
       return
     }
+
     await this.telegram.setWebhook(`https://${domain}${hookPath}`, {
       drop_pending_updates: config.dropPendingUpdates,
       allowed_updates: config.allowedUpdates,
+      certificate: config.webhook.certPath ? {source: config.webhook.certPath} : undefined
     })
     debug(`Bot started with webhook @ https://${domain}`)
   }
